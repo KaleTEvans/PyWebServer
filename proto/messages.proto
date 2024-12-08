@@ -1,0 +1,141 @@
+syntax = "proto3";
+
+// Root Protobuf file for shared messages
+
+message Message {
+    string type = 1;  // Message type (e.g., "confirmation", "option_data")
+    oneof payload {
+        BasicMessage basic_message = 2;
+        Confirmation confirmation = 3;
+        ISBAction isb_action = 4;
+        OptionData option_data = 5;
+        UnderlyingContract underlying_contract = 6;
+        NewsEvent news = 7;
+    }
+}
+
+message BasicMessage {
+    string message = 1;
+}
+
+message Confirmation {
+    string action = 1;
+    string status = 2;
+}
+
+message ISBAction {
+    string component = 1;
+    string action = 2;
+    string data = 3;
+}
+
+message TickData {
+    int64 timestamp = 1;
+    double bid_price = 2;
+    double bid_size = 3;
+    double ask_price = 4;
+    double ask_size = 5;
+    double last_price = 6;
+    double mark_price = 7;
+    double volume = 8;
+    double implied_vol = 9;
+    double delta = 10;
+    double gamma = 11;
+    double vega = 12;
+    double theta = 13;
+    double underlying_price = 14;
+    double tas_price = 15;
+    double tas_quantity = 16;
+    double tas_total_volume = 17;
+    double tas_vwap = 18;
+    string relative_to_money = 19;
+    string filled_by_mm = 20; // "YES" or "NO"
+}
+
+message FiveSecData {
+    int64 time = 1;
+    double open = 2;
+    double close = 3;
+    double high = 4;
+    double low = 5;
+    string volume = 6;
+    int32 count = 7;
+    string rtm = 8;
+}
+
+message OneMinData {
+    int64 time = 1;
+    double open = 2;
+    double close = 3;
+    double high = 4;
+    double low = 5;
+    double candleVol = 6;
+    double tradeCount = 7;
+    double impliedVol = 8;
+    double delta = 9;
+    double gamma = 10;
+    double vega = 11;
+    double theta = 12;
+    double undPrice = 13;
+    double totalVol = 14;
+    string rtm = 15;
+}
+
+message OptionData {
+    string symbol = 1;
+    double strike = 2;
+    string right = 3;
+    string expDate = 4;
+    repeated TickData ticks = 5;
+    repeated FiveSecData fiveSecData = 6;
+    repeated OneMinData oneMinData = 7;
+}
+
+message OptionDataBatch {
+    repeated OptionData optionDataPoints = 1;
+}
+
+message UnderlyingOneMinData {
+    int64 time = 1;
+    double open = 2;
+    double high = 3;
+    double low = 4;
+    double close = 5;
+    double volume = 6;
+    double dailyHigh = 7;
+    double dailyLow = 8;
+    double dailyVolume = 9;
+    double totalCallVolume = 10;
+    double totalPutVolume = 11;
+    double indexFuturePremium = 12;
+    double totalTradeCount = 13;
+    double oneMinuteTradeRate = 14;
+    double realTimeHistoricalVolatility = 15;
+    double optionImpliedVolatility = 16;
+    double callOpenInterest = 17;
+    double putOpenInterest = 18;
+    double futuresOpenInterest = 19;
+}
+
+message UnderlyingAverages {
+    double low13Week = 1;
+    double high13Week = 2;
+    double low26week = 3;
+    double high26Week = 4;
+    double low52Week = 5;
+    double high52Week = 6;
+    double averageVolume90Day = 7;
+}
+
+message UnderlyingContract {
+    string symbol = 1;
+    repeated UnderlyingOneMinData underlying_one_min = 2;
+    repeated UnderlyingAverages underlying_averages = 3;
+}
+
+message NewsEvent {
+    int64 time = 1;
+    string articleId = 2;
+    string headline = 3;
+    double sentimentScore = 4;
+}
