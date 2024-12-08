@@ -14,7 +14,7 @@ from app.cppserver_comms.inbound import WSDataHandler
 # Load WebSocket URL from .env file
 load_dotenv()
 WEBSOCKET_URL = os.getenv("WEBSOCKET_URL")
-CA_CERT_PATH = "/home/kale/dev/TWSStrategyCPPServer/IntradayStrategyBuilder/third_party_libs/CppServer/tools/certificates/ca.crt"
+CA_CERT_PATH = os.getenv("CA_CERT_PATH")
 
 class WebSocketClient(metaclass=Singleton):
 	def __init__(self):
@@ -74,19 +74,6 @@ class WebSocketClient(metaclass=Singleton):
 		"""Add a message to the outbound queue."""
 		await self.msg_send_queue.put(message)
 		print(f"Message queued for sending: {message}")
-
-	# async def _send_ping(self):
-	# 	"""Periodically send pings to the server to keep the connection alive."""
-	# 	while self.is_connected:
-	# 		try:
-	# 			pong_waiter = await self.websocket.ping()
-	# 			await pong_waiter  # Wait for the pong
-	# 			print("Pong received")
-	# 		except Exception as e:
-	# 			print(f"Ping/Pong error: {e}")
-	# 			self.is_connected = False
-	# 			break
-	# 		await asyncio.sleep(10)  # Ping interval
 
 	async def cleanup(self):
 		"""Clean up resources and close the WebSocket connection."""
