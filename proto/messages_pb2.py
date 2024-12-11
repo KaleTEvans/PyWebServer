@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x0emessages.proto\"\x87\x02\n\x07Message\x12\x0c\n\x04type\x18\x01 \x01(\t\x12&\n\rbasic_message\x18\x02 \x01(\x0b\x32\r.BasicMessageH\x00\x12%\n\x0c\x63onfirmation\x18\x03 \x01(\x0b\x32\r.ConfirmationH\x00\x12 \n\nisb_action\x18\x04 \x01(\x0b\x32\n.ISBActionH\x00\x12\"\n\x0boption_data\x18\x05 \x01(\x0b\x32\x0b.OptionDataH\x00\x12\x32\n\x13underlying_contract\x18\x06 \x01(\x0b\x32\x13.UnderlyingContractH\x00\x12\x1a\n\x04news\x18\x07 \x01(\x0b\x32\n.NewsEventH\x00\x42\t\n\x07payload\"\x1f\n\x0c\x42\x61sicMessage\x12\x0f\n\x07message\x18\x01 \x01(\t\".\n\x0c\x43onfirmation\x12\x0e\n\x06\x61\x63tion\x18\x01 \x01(\t\x12\x0e\n\x06status\x18\x02 \x01(\t\"<\n\tISBAction\x12\x11\n\tcomponent\x18\x01 \x01(\t\x12\x0e\n\x06\x61\x63tion\x18\x02 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x03 \x01(\t\"\x8f\x03\n\x08TickData\x12\x11\n\ttimestamp\x18\x01 \x01(\x03\x12\x11\n\tbid_price\x18\x02 \x01(\x01\x12\x10\n\x08\x62id_size\x18\x03 \x01(\x01\x12\x11\n\task_price\x18\x04 \x01(\x01\x12\x10\n\x08\x61sk_size\x18\x05 \x01(\x01\x12\x12\n\nlast_price\x18\x06 \x01(\x01\x12\x12\n\nmark_price\x18\x07 \x01(\x01\x12\x0e\n\x06volume\x18\x08 \x01(\x01\x12\x13\n\x0bimplied_vol\x18\t \x01(\x01\x12\r\n\x05\x64\x65lta\x18\n \x01(\x01\x12\r\n\x05gamma\x18\x0b \x01(\x01\x12\x0c\n\x04vega\x18\x0c \x01(\x01\x12\r\n\x05theta\x18\r \x01(\x01\x12\x18\n\x10underlying_price\x18\x0e \x01(\x01\x12\x11\n\ttas_price\x18\x0f \x01(\x01\x12\x14\n\x0ctas_quantity\x18\x10 \x01(\x01\x12\x18\n\x10tas_total_volume\x18\x11 \x01(\x01\x12\x10\n\x08tas_vwap\x18\x12 \x01(\x01\x12\x19\n\x11relative_to_money\x18\x13 \x01(\t\x12\x14\n\x0c\x66illed_by_mm\x18\x14 \x01(\t\"\x7f\n\x0b\x46iveSecData\x12\x0c\n\x04time\x18\x01 \x01(\x03\x12\x0c\n\x04open\x18\x02 \x01(\x01\x12\r\n\x05\x63lose\x18\x03 \x01(\x01\x12\x0c\n\x04high\x18\x04 \x01(\x01\x12\x0b\n\x03low\x18\x05 \x01(\x01\x12\x0e\n\x06volume\x18\x06 \x01(\t\x12\r\n\x05\x63ount\x18\x07 \x01(\x05\x12\x0b\n\x03rtm\x18\x08 \x01(\t\"\xf9\x01\n\nOneMinData\x12\x0c\n\x04time\x18\x01 \x01(\x03\x12\x0c\n\x04open\x18\x02 \x01(\x01\x12\r\n\x05\x63lose\x18\x03 \x01(\x01\x12\x0c\n\x04high\x18\x04 \x01(\x01\x12\x0b\n\x03low\x18\x05 \x01(\x01\x12\x11\n\tcandleVol\x18\x06 \x01(\x01\x12\x12\n\ntradeCount\x18\x07 \x01(\x01\x12\x12\n\nimpliedVol\x18\x08 \x01(\x01\x12\r\n\x05\x64\x65lta\x18\t \x01(\x01\x12\r\n\x05gamma\x18\n \x01(\x01\x12\x0c\n\x04vega\x18\x0b \x01(\x01\x12\r\n\x05theta\x18\x0c \x01(\x01\x12\x10\n\x08undPrice\x18\r \x01(\x01\x12\x10\n\x08totalVol\x18\x0e \x01(\x01\x12\x0b\n\x03rtm\x18\x0f \x01(\t\"\xaa\x01\n\nOptionData\x12\x0e\n\x06symbol\x18\x01 \x01(\t\x12\x0e\n\x06strike\x18\x02 \x01(\x01\x12\r\n\x05right\x18\x03 \x01(\t\x12\x0f\n\x07\x65xpDate\x18\x04 \x01(\t\x12\x18\n\x05ticks\x18\x05 \x03(\x0b\x32\t.TickData\x12!\n\x0b\x66iveSecData\x18\x06 \x03(\x0b\x32\x0c.FiveSecData\x12\x1f\n\noneMinData\x18\x07 \x03(\x0b\x32\x0b.OneMinData\"8\n\x0fOptionDataBatch\x12%\n\x10optionDataPoints\x18\x01 \x03(\x0b\x32\x0b.OptionData\"\xbf\x03\n\x14UnderlyingOneMinData\x12\x0c\n\x04time\x18\x01 \x01(\x03\x12\x0c\n\x04open\x18\x02 \x01(\x01\x12\x0c\n\x04high\x18\x03 \x01(\x01\x12\x0b\n\x03low\x18\x04 \x01(\x01\x12\r\n\x05\x63lose\x18\x05 \x01(\x01\x12\x0e\n\x06volume\x18\x06 \x01(\x01\x12\x11\n\tdailyHigh\x18\x07 \x01(\x01\x12\x10\n\x08\x64\x61ilyLow\x18\x08 \x01(\x01\x12\x13\n\x0b\x64\x61ilyVolume\x18\t \x01(\x01\x12\x17\n\x0ftotalCallVolume\x18\n \x01(\x01\x12\x16\n\x0etotalPutVolume\x18\x0b \x01(\x01\x12\x1a\n\x12indexFuturePremium\x18\x0c \x01(\x01\x12\x17\n\x0ftotalTradeCount\x18\r \x01(\x01\x12\x1a\n\x12oneMinuteTradeRate\x18\x0e \x01(\x01\x12$\n\x1crealTimeHistoricalVolatility\x18\x0f \x01(\x01\x12\x1f\n\x17optionImpliedVolatility\x18\x10 \x01(\x01\x12\x18\n\x10\x63\x61llOpenInterest\x18\x11 \x01(\x01\x12\x17\n\x0fputOpenInterest\x18\x12 \x01(\x01\x12\x1b\n\x13\x66uturesOpenInterest\x18\x13 \x01(\x01\"\xa5\x01\n\x12UnderlyingAverages\x12\x11\n\tlow13Week\x18\x01 \x01(\x01\x12\x12\n\nhigh13Week\x18\x02 \x01(\x01\x12\x11\n\tlow26week\x18\x03 \x01(\x01\x12\x12\n\nhigh26Week\x18\x04 \x01(\x01\x12\x11\n\tlow52Week\x18\x05 \x01(\x01\x12\x12\n\nhigh52Week\x18\x06 \x01(\x01\x12\x1a\n\x12\x61verageVolume90Day\x18\x07 \x01(\x01\"\x89\x01\n\x12UnderlyingContract\x12\x0e\n\x06symbol\x18\x01 \x01(\t\x12\x31\n\x12underlying_one_min\x18\x02 \x03(\x0b\x32\x15.UnderlyingOneMinData\x12\x30\n\x13underlying_averages\x18\x03 \x03(\x0b\x32\x13.UnderlyingAverages\"V\n\tNewsEvent\x12\x0c\n\x04time\x18\x01 \x01(\x03\x12\x11\n\tarticleId\x18\x02 \x01(\t\x12\x10\n\x08headline\x18\x03 \x01(\t\x12\x16\n\x0esentimentScore\x18\x04 \x01(\x01\x62\x06proto3')
+  serialized_pb=_b('\n\x0emessages.proto\"\x87\x02\n\x07Message\x12\x0c\n\x04type\x18\x01 \x01(\t\x12&\n\rbasic_message\x18\x02 \x01(\x0b\x32\r.BasicMessageH\x00\x12%\n\x0c\x63onfirmation\x18\x03 \x01(\x0b\x32\r.ConfirmationH\x00\x12 \n\nisb_action\x18\x04 \x01(\x0b\x32\n.ISBActionH\x00\x12\"\n\x0boption_data\x18\x05 \x01(\x0b\x32\x0b.OptionDataH\x00\x12\x32\n\x13underlying_contract\x18\x06 \x01(\x0b\x32\x13.UnderlyingContractH\x00\x12\x1a\n\x04news\x18\x07 \x01(\x0b\x32\n.NewsEventH\x00\x42\t\n\x07payload\"\x1f\n\x0c\x42\x61sicMessage\x12\x0f\n\x07message\x18\x01 \x01(\t\".\n\x0c\x43onfirmation\x12\x0e\n\x06\x61\x63tion\x18\x01 \x01(\t\x12\x0e\n\x06status\x18\x02 \x01(\t\"<\n\tISBAction\x12\x11\n\tcomponent\x18\x01 \x01(\t\x12\x0e\n\x06\x61\x63tion\x18\x02 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x03 \x01(\t\"\xa9\x01\n\x10TimeAndSalesData\x12\x11\n\ttimestamp\x18\x01 \x01(\x03\x12\r\n\x05price\x18\x02 \x01(\x01\x12\x10\n\x08quantity\x18\x03 \x01(\x01\x12\x14\n\x0ctotal_volume\x18\x04 \x01(\x01\x12\x0c\n\x04vwap\x18\x05 \x01(\x01\x12\x13\n\x0b\x63urrent_ask\x18\x06 \x01(\x01\x12\x13\n\x0b\x63urrent_bid\x18\x07 \x01(\x01\x12\x13\n\x0b\x63urrent_rtm\x18\x08 \x01(\t\"\xef\x01\n\x08TickData\x12\x11\n\ttimestamp\x18\x01 \x01(\x03\x12\x11\n\tbid_price\x18\x02 \x01(\x01\x12\x10\n\x08\x62id_size\x18\x03 \x01(\x01\x12\x11\n\task_price\x18\x04 \x01(\x01\x12\x10\n\x08\x61sk_size\x18\x05 \x01(\x01\x12\x12\n\nlast_price\x18\x06 \x01(\x01\x12\x12\n\nmark_price\x18\x07 \x01(\x01\x12\x0e\n\x06volume\x18\x08 \x01(\x01\x12\x13\n\x0bimplied_vol\x18\t \x01(\x01\x12\r\n\x05\x64\x65lta\x18\n \x01(\x01\x12\r\n\x05gamma\x18\x0b \x01(\x01\x12\x0c\n\x04vega\x18\x0c \x01(\x01\x12\r\n\x05theta\x18\r \x01(\x01\"\x7f\n\x0b\x46iveSecData\x12\x0c\n\x04time\x18\x01 \x01(\x03\x12\x0c\n\x04open\x18\x02 \x01(\x01\x12\r\n\x05\x63lose\x18\x03 \x01(\x01\x12\x0c\n\x04high\x18\x04 \x01(\x01\x12\x0b\n\x03low\x18\x05 \x01(\x01\x12\x0e\n\x06volume\x18\x06 \x01(\t\x12\r\n\x05\x63ount\x18\x07 \x01(\x05\x12\x0b\n\x03rtm\x18\x08 \x01(\t\"\xfe\x01\n\nOneMinData\x12\x0c\n\x04time\x18\x01 \x01(\x03\x12\x0c\n\x04open\x18\x02 \x01(\x01\x12\r\n\x05\x63lose\x18\x03 \x01(\x01\x12\x0c\n\x04high\x18\x04 \x01(\x01\x12\x0b\n\x03low\x18\x05 \x01(\x01\x12\x12\n\ncandle_vol\x18\x06 \x01(\x01\x12\x13\n\x0btrade_count\x18\x07 \x01(\x01\x12\x13\n\x0bimplied_vol\x18\x08 \x01(\x01\x12\r\n\x05\x64\x65lta\x18\t \x01(\x01\x12\r\n\x05gamma\x18\n \x01(\x01\x12\x0c\n\x04vega\x18\x0b \x01(\x01\x12\r\n\x05theta\x18\x0c \x01(\x01\x12\x11\n\tund_price\x18\r \x01(\x01\x12\x11\n\ttotal_vol\x18\x0e \x01(\x01\x12\x0b\n\x03rtm\x18\x0f \x01(\t\"\xcf\x01\n\nOptionData\x12\x0e\n\x06symbol\x18\x01 \x01(\t\x12\x0e\n\x06strike\x18\x02 \x01(\x01\x12\r\n\x05right\x18\x03 \x01(\t\x12\x10\n\x08\x65xp_date\x18\x04 \x01(\t\x12\x18\n\x05ticks\x18\x05 \x03(\x0b\x32\t.TickData\x12#\n\rfive_sec_data\x18\x06 \x03(\x0b\x32\x0c.FiveSecData\x12!\n\x0cone_min_data\x18\x07 \x03(\x0b\x32\x0b.OneMinData\x12\x1e\n\x03tas\x18\x08 \x03(\x0b\x32\x11.TimeAndSalesData\"8\n\x0fOptionDataBatch\x12%\n\x10optionDataPoints\x18\x01 \x03(\x0b\x32\x0b.OptionData\"2\n\x13UnderlyingPriceTick\x12\x0c\n\x04time\x18\x01 \x01(\x03\x12\r\n\x05price\x18\x02 \x01(\x01\"\xd8\x03\n\x14UnderlyingOneMinData\x12\x0c\n\x04time\x18\x01 \x01(\x03\x12\x0c\n\x04open\x18\x02 \x01(\x01\x12\x0c\n\x04high\x18\x03 \x01(\x01\x12\x0b\n\x03low\x18\x04 \x01(\x01\x12\r\n\x05\x63lose\x18\x05 \x01(\x01\x12\x0e\n\x06volume\x18\x06 \x01(\x01\x12\x12\n\ndaily_high\x18\x07 \x01(\x01\x12\x11\n\tdaily_low\x18\x08 \x01(\x01\x12\x14\n\x0c\x64\x61ily_volume\x18\t \x01(\x01\x12\x19\n\x11total_call_volume\x18\n \x01(\x01\x12\x18\n\x10total_put_volume\x18\x0b \x01(\x01\x12\x1c\n\x14index_future_premium\x18\x0c \x01(\x01\x12\x19\n\x11total_trade_count\x18\r \x01(\x01\x12\x1d\n\x15one_minute_trade_rate\x18\x0e \x01(\x01\x12\'\n\x1freal_time_historical_volatility\x18\x0f \x01(\x01\x12!\n\x19option_implied_volatility\x18\x10 \x01(\x01\x12\x1a\n\x12\x63\x61ll_open_interest\x18\x11 \x01(\x01\x12\x19\n\x11put_open_interest\x18\x12 \x01(\x01\x12\x1d\n\x15\x66utures_open_interest\x18\x13 \x01(\x01\"\xb4\x01\n\x12UnderlyingAverages\x12\x13\n\x0blow_13_week\x18\x01 \x01(\x01\x12\x14\n\x0chigh_13_week\x18\x02 \x01(\x01\x12\x13\n\x0blow_26_week\x18\x03 \x01(\x01\x12\x14\n\x0chigh_26_week\x18\x04 \x01(\x01\x12\x13\n\x0blow_52_week\x18\x05 \x01(\x01\x12\x14\n\x0chigh_52_week\x18\x06 \x01(\x01\x12\x1d\n\x15\x61verage_volume_90_day\x18\x07 \x01(\x01\"\xbe\x01\n\x12UnderlyingContract\x12\x0e\n\x06symbol\x18\x01 \x01(\t\x12\x31\n\x12underlying_one_min\x18\x02 \x03(\x0b\x32\x15.UnderlyingOneMinData\x12\x30\n\x13underlying_averages\x18\x03 \x03(\x0b\x32\x13.UnderlyingAverages\x12\x33\n\x15underlying_price_tick\x18\x04 \x03(\x0b\x32\x14.UnderlyingPriceTick\"X\n\tNewsEvent\x12\x0c\n\x04time\x18\x01 \x01(\x03\x12\x12\n\narticle_id\x18\x02 \x01(\t\x12\x10\n\x08headline\x18\x03 \x01(\t\x12\x17\n\x0fsentiment_score\x18\x04 \x01(\x01\x62\x06proto3')
 )
 
 
@@ -215,6 +215,86 @@ _ISBACTION = _descriptor.Descriptor(
 )
 
 
+_TIMEANDSALESDATA = _descriptor.Descriptor(
+  name='TimeAndSalesData',
+  full_name='TimeAndSalesData',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='timestamp', full_name='TimeAndSalesData.timestamp', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='price', full_name='TimeAndSalesData.price', index=1,
+      number=2, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='quantity', full_name='TimeAndSalesData.quantity', index=2,
+      number=3, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='total_volume', full_name='TimeAndSalesData.total_volume', index=3,
+      number=4, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='vwap', full_name='TimeAndSalesData.vwap', index=4,
+      number=5, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='current_ask', full_name='TimeAndSalesData.current_ask', index=5,
+      number=6, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='current_bid', full_name='TimeAndSalesData.current_bid', index=6,
+      number=7, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='current_rtm', full_name='TimeAndSalesData.current_rtm', index=7,
+      number=8, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=428,
+  serialized_end=597,
+)
+
+
 _TICKDATA = _descriptor.Descriptor(
   name='TickData',
   full_name='TickData',
@@ -313,55 +393,6 @@ _TICKDATA = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='underlying_price', full_name='TickData.underlying_price', index=13,
-      number=14, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='tas_price', full_name='TickData.tas_price', index=14,
-      number=15, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='tas_quantity', full_name='TickData.tas_quantity', index=15,
-      number=16, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='tas_total_volume', full_name='TickData.tas_total_volume', index=16,
-      number=17, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='tas_vwap', full_name='TickData.tas_vwap', index=17,
-      number=18, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='relative_to_money', full_name='TickData.relative_to_money', index=18,
-      number=19, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='filled_by_mm', full_name='TickData.filled_by_mm', index=19,
-      number=20, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -374,8 +405,8 @@ _TICKDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=428,
-  serialized_end=827,
+  serialized_start=600,
+  serialized_end=839,
 )
 
 
@@ -454,8 +485,8 @@ _FIVESECDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=829,
-  serialized_end=956,
+  serialized_start=841,
+  serialized_end=968,
 )
 
 
@@ -502,21 +533,21 @@ _ONEMINDATA = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='candleVol', full_name='OneMinData.candleVol', index=5,
+      name='candle_vol', full_name='OneMinData.candle_vol', index=5,
       number=6, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='tradeCount', full_name='OneMinData.tradeCount', index=6,
+      name='trade_count', full_name='OneMinData.trade_count', index=6,
       number=7, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='impliedVol', full_name='OneMinData.impliedVol', index=7,
+      name='implied_vol', full_name='OneMinData.implied_vol', index=7,
       number=8, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
@@ -551,14 +582,14 @@ _ONEMINDATA = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='undPrice', full_name='OneMinData.undPrice', index=12,
+      name='und_price', full_name='OneMinData.und_price', index=12,
       number=13, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='totalVol', full_name='OneMinData.totalVol', index=13,
+      name='total_vol', full_name='OneMinData.total_vol', index=13,
       number=14, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
@@ -583,8 +614,8 @@ _ONEMINDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=959,
-  serialized_end=1208,
+  serialized_start=971,
+  serialized_end=1225,
 )
 
 
@@ -617,7 +648,7 @@ _OPTIONDATA = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='expDate', full_name='OptionData.expDate', index=3,
+      name='exp_date', full_name='OptionData.exp_date', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -631,15 +662,22 @@ _OPTIONDATA = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='fiveSecData', full_name='OptionData.fiveSecData', index=5,
+      name='five_sec_data', full_name='OptionData.five_sec_data', index=5,
       number=6, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='oneMinData', full_name='OptionData.oneMinData', index=6,
+      name='one_min_data', full_name='OptionData.one_min_data', index=6,
       number=7, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='tas', full_name='OptionData.tas', index=7,
+      number=8, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -656,8 +694,8 @@ _OPTIONDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1211,
-  serialized_end=1381,
+  serialized_start=1228,
+  serialized_end=1435,
 )
 
 
@@ -687,8 +725,46 @@ _OPTIONDATABATCH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1383,
-  serialized_end=1439,
+  serialized_start=1437,
+  serialized_end=1493,
+)
+
+
+_UNDERLYINGPRICETICK = _descriptor.Descriptor(
+  name='UnderlyingPriceTick',
+  full_name='UnderlyingPriceTick',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='time', full_name='UnderlyingPriceTick.time', index=0,
+      number=1, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='price', full_name='UnderlyingPriceTick.price', index=1,
+      number=2, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1495,
+  serialized_end=1545,
 )
 
 
@@ -742,91 +818,91 @@ _UNDERLYINGONEMINDATA = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='dailyHigh', full_name='UnderlyingOneMinData.dailyHigh', index=6,
+      name='daily_high', full_name='UnderlyingOneMinData.daily_high', index=6,
       number=7, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='dailyLow', full_name='UnderlyingOneMinData.dailyLow', index=7,
+      name='daily_low', full_name='UnderlyingOneMinData.daily_low', index=7,
       number=8, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='dailyVolume', full_name='UnderlyingOneMinData.dailyVolume', index=8,
+      name='daily_volume', full_name='UnderlyingOneMinData.daily_volume', index=8,
       number=9, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='totalCallVolume', full_name='UnderlyingOneMinData.totalCallVolume', index=9,
+      name='total_call_volume', full_name='UnderlyingOneMinData.total_call_volume', index=9,
       number=10, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='totalPutVolume', full_name='UnderlyingOneMinData.totalPutVolume', index=10,
+      name='total_put_volume', full_name='UnderlyingOneMinData.total_put_volume', index=10,
       number=11, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='indexFuturePremium', full_name='UnderlyingOneMinData.indexFuturePremium', index=11,
+      name='index_future_premium', full_name='UnderlyingOneMinData.index_future_premium', index=11,
       number=12, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='totalTradeCount', full_name='UnderlyingOneMinData.totalTradeCount', index=12,
+      name='total_trade_count', full_name='UnderlyingOneMinData.total_trade_count', index=12,
       number=13, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='oneMinuteTradeRate', full_name='UnderlyingOneMinData.oneMinuteTradeRate', index=13,
+      name='one_minute_trade_rate', full_name='UnderlyingOneMinData.one_minute_trade_rate', index=13,
       number=14, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='realTimeHistoricalVolatility', full_name='UnderlyingOneMinData.realTimeHistoricalVolatility', index=14,
+      name='real_time_historical_volatility', full_name='UnderlyingOneMinData.real_time_historical_volatility', index=14,
       number=15, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='optionImpliedVolatility', full_name='UnderlyingOneMinData.optionImpliedVolatility', index=15,
+      name='option_implied_volatility', full_name='UnderlyingOneMinData.option_implied_volatility', index=15,
       number=16, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='callOpenInterest', full_name='UnderlyingOneMinData.callOpenInterest', index=16,
+      name='call_open_interest', full_name='UnderlyingOneMinData.call_open_interest', index=16,
       number=17, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='putOpenInterest', full_name='UnderlyingOneMinData.putOpenInterest', index=17,
+      name='put_open_interest', full_name='UnderlyingOneMinData.put_open_interest', index=17,
       number=18, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='futuresOpenInterest', full_name='UnderlyingOneMinData.futuresOpenInterest', index=18,
+      name='futures_open_interest', full_name='UnderlyingOneMinData.futures_open_interest', index=18,
       number=19, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
@@ -844,8 +920,8 @@ _UNDERLYINGONEMINDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1442,
-  serialized_end=1889,
+  serialized_start=1548,
+  serialized_end=2020,
 )
 
 
@@ -857,49 +933,49 @@ _UNDERLYINGAVERAGES = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='low13Week', full_name='UnderlyingAverages.low13Week', index=0,
+      name='low_13_week', full_name='UnderlyingAverages.low_13_week', index=0,
       number=1, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='high13Week', full_name='UnderlyingAverages.high13Week', index=1,
+      name='high_13_week', full_name='UnderlyingAverages.high_13_week', index=1,
       number=2, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='low26week', full_name='UnderlyingAverages.low26week', index=2,
+      name='low_26_week', full_name='UnderlyingAverages.low_26_week', index=2,
       number=3, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='high26Week', full_name='UnderlyingAverages.high26Week', index=3,
+      name='high_26_week', full_name='UnderlyingAverages.high_26_week', index=3,
       number=4, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='low52Week', full_name='UnderlyingAverages.low52Week', index=4,
+      name='low_52_week', full_name='UnderlyingAverages.low_52_week', index=4,
       number=5, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='high52Week', full_name='UnderlyingAverages.high52Week', index=5,
+      name='high_52_week', full_name='UnderlyingAverages.high_52_week', index=5,
       number=6, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='averageVolume90Day', full_name='UnderlyingAverages.averageVolume90Day', index=6,
+      name='average_volume_90_day', full_name='UnderlyingAverages.average_volume_90_day', index=6,
       number=7, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
@@ -917,8 +993,8 @@ _UNDERLYINGAVERAGES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1892,
-  serialized_end=2057,
+  serialized_start=2023,
+  serialized_end=2203,
 )
 
 
@@ -950,6 +1026,13 @@ _UNDERLYINGCONTRACT = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='underlying_price_tick', full_name='UnderlyingContract.underlying_price_tick', index=3,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -962,8 +1045,8 @@ _UNDERLYINGCONTRACT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2060,
-  serialized_end=2197,
+  serialized_start=2206,
+  serialized_end=2396,
 )
 
 
@@ -982,7 +1065,7 @@ _NEWSEVENT = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='articleId', full_name='NewsEvent.articleId', index=1,
+      name='article_id', full_name='NewsEvent.article_id', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -996,7 +1079,7 @@ _NEWSEVENT = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='sentimentScore', full_name='NewsEvent.sentimentScore', index=3,
+      name='sentiment_score', full_name='NewsEvent.sentiment_score', index=3,
       number=4, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
@@ -1014,8 +1097,8 @@ _NEWSEVENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2199,
-  serialized_end=2285,
+  serialized_start=2398,
+  serialized_end=2486,
 )
 
 _MESSAGE.fields_by_name['basic_message'].message_type = _BASICMESSAGE
@@ -1043,20 +1126,24 @@ _MESSAGE.oneofs_by_name['payload'].fields.append(
   _MESSAGE.fields_by_name['news'])
 _MESSAGE.fields_by_name['news'].containing_oneof = _MESSAGE.oneofs_by_name['payload']
 _OPTIONDATA.fields_by_name['ticks'].message_type = _TICKDATA
-_OPTIONDATA.fields_by_name['fiveSecData'].message_type = _FIVESECDATA
-_OPTIONDATA.fields_by_name['oneMinData'].message_type = _ONEMINDATA
+_OPTIONDATA.fields_by_name['five_sec_data'].message_type = _FIVESECDATA
+_OPTIONDATA.fields_by_name['one_min_data'].message_type = _ONEMINDATA
+_OPTIONDATA.fields_by_name['tas'].message_type = _TIMEANDSALESDATA
 _OPTIONDATABATCH.fields_by_name['optionDataPoints'].message_type = _OPTIONDATA
 _UNDERLYINGCONTRACT.fields_by_name['underlying_one_min'].message_type = _UNDERLYINGONEMINDATA
 _UNDERLYINGCONTRACT.fields_by_name['underlying_averages'].message_type = _UNDERLYINGAVERAGES
+_UNDERLYINGCONTRACT.fields_by_name['underlying_price_tick'].message_type = _UNDERLYINGPRICETICK
 DESCRIPTOR.message_types_by_name['Message'] = _MESSAGE
 DESCRIPTOR.message_types_by_name['BasicMessage'] = _BASICMESSAGE
 DESCRIPTOR.message_types_by_name['Confirmation'] = _CONFIRMATION
 DESCRIPTOR.message_types_by_name['ISBAction'] = _ISBACTION
+DESCRIPTOR.message_types_by_name['TimeAndSalesData'] = _TIMEANDSALESDATA
 DESCRIPTOR.message_types_by_name['TickData'] = _TICKDATA
 DESCRIPTOR.message_types_by_name['FiveSecData'] = _FIVESECDATA
 DESCRIPTOR.message_types_by_name['OneMinData'] = _ONEMINDATA
 DESCRIPTOR.message_types_by_name['OptionData'] = _OPTIONDATA
 DESCRIPTOR.message_types_by_name['OptionDataBatch'] = _OPTIONDATABATCH
+DESCRIPTOR.message_types_by_name['UnderlyingPriceTick'] = _UNDERLYINGPRICETICK
 DESCRIPTOR.message_types_by_name['UnderlyingOneMinData'] = _UNDERLYINGONEMINDATA
 DESCRIPTOR.message_types_by_name['UnderlyingAverages'] = _UNDERLYINGAVERAGES
 DESCRIPTOR.message_types_by_name['UnderlyingContract'] = _UNDERLYINGCONTRACT
@@ -1090,6 +1177,13 @@ ISBAction = _reflection.GeneratedProtocolMessageType('ISBAction', (_message.Mess
   # @@protoc_insertion_point(class_scope:ISBAction)
   ))
 _sym_db.RegisterMessage(ISBAction)
+
+TimeAndSalesData = _reflection.GeneratedProtocolMessageType('TimeAndSalesData', (_message.Message,), dict(
+  DESCRIPTOR = _TIMEANDSALESDATA,
+  __module__ = 'messages_pb2'
+  # @@protoc_insertion_point(class_scope:TimeAndSalesData)
+  ))
+_sym_db.RegisterMessage(TimeAndSalesData)
 
 TickData = _reflection.GeneratedProtocolMessageType('TickData', (_message.Message,), dict(
   DESCRIPTOR = _TICKDATA,
@@ -1125,6 +1219,13 @@ OptionDataBatch = _reflection.GeneratedProtocolMessageType('OptionDataBatch', (_
   # @@protoc_insertion_point(class_scope:OptionDataBatch)
   ))
 _sym_db.RegisterMessage(OptionDataBatch)
+
+UnderlyingPriceTick = _reflection.GeneratedProtocolMessageType('UnderlyingPriceTick', (_message.Message,), dict(
+  DESCRIPTOR = _UNDERLYINGPRICETICK,
+  __module__ = 'messages_pb2'
+  # @@protoc_insertion_point(class_scope:UnderlyingPriceTick)
+  ))
+_sym_db.RegisterMessage(UnderlyingPriceTick)
 
 UnderlyingOneMinData = _reflection.GeneratedProtocolMessageType('UnderlyingOneMinData', (_message.Message,), dict(
   DESCRIPTOR = _UNDERLYINGONEMINDATA,

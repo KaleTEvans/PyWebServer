@@ -29,6 +29,17 @@ message ISBAction {
     string data = 3;
 }
 
+message TimeAndSalesData {
+    int64 timestamp = 1;
+    double price = 2;
+    double quantity = 3;
+    double total_volume = 4;
+    double vwap = 5;
+    double current_ask = 6;
+    double current_bid = 7;
+    string current_rtm = 8;
+}
+
 message TickData {
     int64 timestamp = 1;
     double bid_price = 2;
@@ -43,13 +54,6 @@ message TickData {
     double gamma = 11;
     double vega = 12;
     double theta = 13;
-    double underlying_price = 14;
-    double tas_price = 15;
-    double tas_quantity = 16;
-    double tas_total_volume = 17;
-    double tas_vwap = 18;
-    string relative_to_money = 19;
-    string filled_by_mm = 20; // "YES" or "NO"
 }
 
 message FiveSecData {
@@ -69,15 +73,15 @@ message OneMinData {
     double close = 3;
     double high = 4;
     double low = 5;
-    double candleVol = 6;
-    double tradeCount = 7;
-    double impliedVol = 8;
+    double candle_vol = 6;
+    double trade_count = 7;
+    double implied_vol = 8;
     double delta = 9;
     double gamma = 10;
     double vega = 11;
     double theta = 12;
-    double undPrice = 13;
-    double totalVol = 14;
+    double und_price = 13;
+    double total_vol = 14;
     string rtm = 15;
 }
 
@@ -85,14 +89,20 @@ message OptionData {
     string symbol = 1;
     double strike = 2;
     string right = 3;
-    string expDate = 4;
+    string exp_date = 4;
     repeated TickData ticks = 5;
-    repeated FiveSecData fiveSecData = 6;
-    repeated OneMinData oneMinData = 7;
+    repeated FiveSecData five_sec_data = 6;
+    repeated OneMinData one_min_data = 7;
+    repeated TimeAndSalesData tas = 8;
 }
 
 message OptionDataBatch {
     repeated OptionData optionDataPoints = 1;
+}
+
+message UnderlyingPriceTick {
+    int64 time = 1;
+    double price = 2;
 }
 
 message UnderlyingOneMinData {
@@ -102,40 +112,41 @@ message UnderlyingOneMinData {
     double low = 4;
     double close = 5;
     double volume = 6;
-    double dailyHigh = 7;
-    double dailyLow = 8;
-    double dailyVolume = 9;
-    double totalCallVolume = 10;
-    double totalPutVolume = 11;
-    double indexFuturePremium = 12;
-    double totalTradeCount = 13;
-    double oneMinuteTradeRate = 14;
-    double realTimeHistoricalVolatility = 15;
-    double optionImpliedVolatility = 16;
-    double callOpenInterest = 17;
-    double putOpenInterest = 18;
-    double futuresOpenInterest = 19;
+    double daily_high = 7;
+    double daily_low = 8;
+    double daily_volume = 9;
+    double total_call_volume = 10;
+    double total_put_volume = 11;
+    double index_future_premium = 12;
+    double total_trade_count = 13;
+    double one_minute_trade_rate = 14;
+    double real_time_historical_volatility = 15;
+    double option_implied_volatility = 16;
+    double call_open_interest = 17;
+    double put_open_interest = 18;
+    double futures_open_interest = 19;
 }
 
 message UnderlyingAverages {
-    double low13Week = 1;
-    double high13Week = 2;
-    double low26week = 3;
-    double high26Week = 4;
-    double low52Week = 5;
-    double high52Week = 6;
-    double averageVolume90Day = 7;
+    double low_13_week = 1;
+    double high_13_week = 2;
+    double low_26_week = 3;
+    double high_26_week = 4;
+    double low_52_week = 5;
+    double high_52_week = 6;
+    double average_volume_90_day = 7;
 }
 
 message UnderlyingContract {
     string symbol = 1;
     repeated UnderlyingOneMinData underlying_one_min = 2;
     repeated UnderlyingAverages underlying_averages = 3;
+    repeated UnderlyingPriceTick underlying_price_tick = 4;
 }
 
 message NewsEvent {
     int64 time = 1;
-    string articleId = 2;
+    string article_id = 2;
     string headline = 3;
-    double sentimentScore = 4;
+    double sentiment_score = 4;
 }
