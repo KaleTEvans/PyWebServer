@@ -30,6 +30,8 @@ class WebSocketClient(metaclass=Singleton):
 		"""Establish a connection to the WebSocket server."""
 		ssl_context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH)
 		ssl_context.load_verify_locations(CA_CERT_PATH)
+		ssl_context.check_hostname = False  # Disable hostname verification
+		ssl_context.verify_mode = ssl.CERT_NONE  # Disable certificate verification
 
 		try:
 			self.websocket = await websockets.connect(self.url, ssl=ssl_context)

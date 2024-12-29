@@ -45,7 +45,7 @@ async def start_scanner():
     await ws_client.send_message(serialized_msg)
 
 @cpp_scanner_router.post("/stop")
-async def start_scanner():
+async def stop_scanner():
     isb_action = messages_pb2.ISBAction()
     isb_action.action = "stop"
     isb_action.component = "option_scanner"

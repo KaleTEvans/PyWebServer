@@ -11,6 +11,13 @@ from google.protobuf.message import Message as ProtobufMessage
 from typing import Union
 from datetime import datetime
 
+from app.option_data_handling import hf_data_processor
+
+hf_data = hf_data_processor.HFDataHandler()
+
+# Data type conversion functions to pydantic models
+
+
 # Handle all incoming messages from the CPP Server here
 class WSDataHandler(metaclass=Singleton):
     def __init__(self):
@@ -33,7 +40,7 @@ class WSDataHandler(metaclass=Singleton):
                 pydantic_model = self.convert_from_protobuf(protobuf_message=parsed_message)
                 self.handle_formatted_messages(pydantic_model=pydantic_model)
             except Exception as e:
-                print(f"Exception thrown: {e}")
+                print(f"Exception thrown during cpp websocket processing: {e}")
                 continue    
 
     def convert_from_protobuf(self, protobuf_message) -> Union[BasicMessageModel, ConfirmationModel, 
@@ -146,7 +153,7 @@ class WSDataHandler(metaclass=Singleton):
                 underlying_one_min=[
                     UnderlyingOneMinDataModel(
                         time=uom.time,
-                        date_time=datetime.fromtimestamp(uom.time / 1000),
+                        date_time=datetime.fromtimestamp(uom.time),
                         open=uom.open,
                         high=uom.high,
                         low=uom.low,
@@ -213,25 +220,16 @@ class WSDataHandler(metaclass=Singleton):
             print(f"Data: {pydantic_model.data}")
 
         elif isinstance(pydantic_model, OptionDataModel):
-            # if len(pydantic_model.one_min_data) > 0:
-            #     print(f"Received option data.")
-            #     print(f"Symbol: {pydantic_model.symbol}")
-            #     print(f"Strike: {pydantic_model.strike}")
-            #     print(f"Right: {pydantic_model.right}")
-            #     print(f"Exp Date: {pydantic_model.exp_date}")
-            #     print(f"Five Sec Data: {pydantic_model.five_sec_data}")
-            #     #print(f"Time and Sales: {pydantic_model.tas}")
-            #     print(f"One Mine Data: {pydantic_model.one_min_data}")
-            return
+            hf_data.add_new_data(pydantic_model=pydantic_model)
         
         elif isinstance(pydantic_model, UnderlyingContractModel):
-            print(f"Received Underlying Contract message.")
-            print(f"Averages: {pydantic_model.underlying_averages}")
-            print(f"One min data: {pydantic_model.underlying_one_min}")
+            hf_data.add_new_data(pydantic_model=pydantic_model)
 
         elif isinstance(pydantic_model, NewsEventModel):
+            hf_data.add_new_data(pydantic_model=pydantic_model)
             print(f"Article Received: {pydantic_model.headline}")
             print(f"Sentiment Score: {pydantic_model.sentiment_score}")
+            print(f"Time: {pydantic_model.date_time}")
 
         else:
             print("Unhandled message type.")

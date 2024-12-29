@@ -1,5 +1,8 @@
 from pydantic import BaseModel
 from typing import Optional, List
+from datetime import datetime, timedelta
+import random
+import time
 
 class BasicMessageModel(BaseModel):
     message: str
@@ -12,6 +15,15 @@ class ISBActionModel(BaseModel):
     component: str
     action: str
     data: Optional[str] = None
+
+
+###################################################################
+# Sub models of option ticks to be sent via websocket to front end
+###################################################################
+
+class BidPrice(BaseModel):
+    timestamp: int
+    bid_price: float
 
 class TimeAndSalesDataModel(BaseModel):
     timestamp: int
@@ -81,7 +93,7 @@ class UnderlyingPriceTickModel(BaseModel):
 
 class UnderlyingOneMinDataModel(BaseModel):
     time: int
-    date_time: str
+    date_time: datetime
     open: float
     high: float
     low: float
@@ -116,12 +128,47 @@ class UnderlyingContractModel(BaseModel):
     underlying_averages: Optional[List[UnderlyingAveragesModel]]
     underlying_price_ticks: Optional[List[UnderlyingPriceTickModel]]
 
+    # Random data generation
+    @classmethod
+    def random_tick(cls, prev):   
+        #previous_price = 5970 # Starting price to generate random values based off of
+
+        def next_price(prev):
+            return round(prev + random.uniform(-1, 1), 2)
+        
+        return cls(
+            symbol="SPX",
+            underlying_one_min=[],
+            underlying_averages=[],
+            underlying_price_ticks=[
+                UnderlyingPriceTickModel(
+                    time=round(time.time() * 1000),
+                    price=next_price(prev=prev)
+                )
+            ]
+        )
+
 class NewsEventModel(BaseModel):
     time: int
-    date_time: str
+    date_time: datetime
     article_id: str
     headline: str
     sentiment_score: float
+
+    # Random data generation
+    @classmethod
+    def random(cls):
+        def random_datetime():
+            return datetime.now() - timedelta(seconds=random.randint(0, 100000))
+        
+        return cls(
+            time=int((datetime.now() - timedelta(seconds=random.randint(0, 100000))).timestamp() * 1000),
+            date_time=random_datetime(),
+            article_id=f"ART{random.randint(1000, 9999)}",
+            headline=f"Breaking News {random.randint(1, 100)}",
+            sentiment_score=random.uniform(-1, 1)
+        )
+
 
 class MessageModel(BaseModel):
     type: str
