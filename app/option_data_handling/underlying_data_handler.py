@@ -8,45 +8,13 @@
 from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional, List
+import asyncio
 
 from utils.standard_dev import StreamingStatistics
-from app.cppserver_comms.models import (UnderlyingContractModel, UnderlyingOneMinDataModel,
-                                        UnderlyingAveragesModel, UnderlyingPriceTickModel)
+from app.cppserver_comms.models import (UnderlyingContractModel, UnderlyingCandle, UnderlyingTick,
+                                        UnderlyingExtraData, UnderlyingGeneral, OutboundWSData)
 
 from app import websocket_server
-
-class UnderlyingCandle(BaseModel):
-    time: int
-    date_time: datetime
-    open: float
-    high: float
-    low: float
-    close: float
-    total_call_volume: Optional[int]
-    total_put_volume: Optional[int]
-    option_implied_volatility: Optional[float]
-    candle_returns: Optional[float] = 0
-    call_volume_delta: Optional[float] = 0
-    put_volume_delta: Optional[float] = 0
-
-class UnderlyingTick(BaseModel):
-    time: int
-    price: float
-
-class UnderlyingExtraData(BaseModel):
-    call_open_interest: int
-    put_open_interest: int
-    futures_open_interest: int
-    low_13_week: float
-    high_13_week: float 
-    low_26_week: float
-    high_26_week: float
-    low_52_week: float
-    high_52_weeK: float
-    daily_high: float
-    daily_low: float
-    last_option_iv: float
-
 
 ###############################################
 # All data handled here
@@ -111,6 +79,8 @@ class UnderlyingDataHandler:
                     option_implied_volatility=self.last_option_iv
                 )
 
+                print(candle)
+
                 # Update statistic values
                 candle_returns = ((row.close - row.open) / row.open) * 100
                 self.one_min_price_stats.add(candle_returns)
@@ -132,6 +102,8 @@ class UnderlyingDataHandler:
                 # TODO: Add function to send to websocket
                 ##########################################
 
+                # await websocket_server.react_queue.put(candle.model_dump_json())
+
         if len(data.underlying_price_ticks) > 0:
             for row in data.underlying_price_ticks:
                 tick = UnderlyingTick(
@@ -139,14 +111,25 @@ class UnderlyingDataHandler:
                     price=row.price
                 )
 
-                print(f"Time: {tick.time}")
-                print(f"Price: {tick.price}")
+                underlying = UnderlyingGeneral(
+                    symbol=self.symbol,
+                    tick=tick
+                )
+
+                outbound = OutboundWSData(
+                    type="underlying",
+                    underlying=underlying
+                )
 
                 ##########################################
                 # TODO: Add function to send to websocket
                 ##########################################
 
-                # websocket_server.react_queue.put(tick)
+
+                self.enqueue_ws_data(data=outbound.model_dump_json())
+
+    def enqueue_ws_data(self, data):
+        websocket_server.react_queue.put(data)
 
     def get_candles(self):
         return self.one_min_candles

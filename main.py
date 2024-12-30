@@ -21,30 +21,23 @@ hf_data = hf_data_processor.HFDataHandler()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # connect_task = asyncio.create_task(ws_client.connect())
+    connect_task = asyncio.create_task(ws_client.connect())
     hf_data.start()
-    cpp_ws_test.start_cpp_ws_test()
-    #await outbound.add_ticker_to_scanner(symbol="SPX")
-    #await outbound.start_scanner()
+    # cpp_ws_test.start_cpp_ws_test()
+    await outbound.add_ticker_to_scanner(symbol="SPX")
+    await outbound.start_scanner()
     yield  
     # Ensure the WebSocket is properly disconnected
-    cpp_ws_test.stop_cpp_ws_test()
+    # cpp_ws_test.stop_cpp_ws_test()
     hf_data.stop()
-    # await ws_client.cleanup()
-    # connect_task.cancel()
+    await ws_client.cleanup()
+    connect_task.cancel()
 
 app = FastAPI(lifespan=lifespan)
 
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
-
-# @app.get("/items/test-websocket")
-# def test_websocket():
-#     client = TestClient(app=app)
-#     with client.websocket_connect("/hf-data/ws") as websocket:
-#         data = websocket.receive_json()
-#         print(data)
 
 app.include_router(outbound.outbound_cpp_ws_router)
 app.include_router(hf_data_processor.option_data_router)

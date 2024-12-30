@@ -12,7 +12,7 @@ from app.cppserver_comms.models import (OptionDataModel, FiveSecDataModel, TimeA
                                         UnderlyingPriceTickModel ,TickDataModel, OneMinDataModel,
                                         UnderlyingContractModel, NewsEventModel)
 
-from fastapi import APIRouter
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from fastapi.responses import JSONResponse
 from typing import List
 
@@ -82,7 +82,6 @@ class HFDataHandler(metaclass=Singleton):
         try:
             with self._lock:
                 self.news_objects.append(data)
-                self.news_data = pd.concat([self.news_data, pd.DataFrame([data.__dict__])]).reset_index(drop=True)
         except Exception as e:
             print(f"Error handling news data: {e}")
 
@@ -91,12 +90,13 @@ class HFDataHandler(metaclass=Singleton):
             return self.news_objects
 
     def _handle_underlying_data(self, data: UnderlyingContractModel):
-        if data.symbol not in self.underlying_data.keys():
-            underlying_data = UnderlyingDataHandler(data.symbol)
-            self.underlying_data[data.symbol] = underlying_data
-            print(f"New ticker added to UnderlyingData: {data.symbol}")
+        with self._lock:
+            if data.symbol not in self.underlying_data.keys():
+                underlying_data = UnderlyingDataHandler(data.symbol)
+                self.underlying_data[data.symbol] = underlying_data
+                print(f"New ticker added to UnderlyingData: {data.symbol}")
 
-        self.underlying_data[data.symbol].add_data(data=data)
+            self.underlying_data[data.symbol].add_data(data=data)
 
     def _handle_option_data(self, data: OptionDataModel):
         return

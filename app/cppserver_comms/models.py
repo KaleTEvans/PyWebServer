@@ -131,8 +131,6 @@ class UnderlyingContractModel(BaseModel):
     # Random data generation
     @classmethod
     def random_tick(cls, prev):   
-        #previous_price = 5970 # Starting price to generate random values based off of
-
         def next_price(prev):
             return round(prev + random.uniform(-1, 1), 2)
         
@@ -147,6 +145,39 @@ class UnderlyingContractModel(BaseModel):
                 )
             ]
         )
+    
+    @classmethod
+    def random_candles(cls, open, high, low, close, max_price, min_price):
+        return cls(
+            symbol="SPX",
+            underlying_one_min=[
+                UnderlyingOneMinDataModel(
+                    time=round(time.time() * 1000),
+                    date_time=datetime.fromtimestamp(round(time.time())),
+                    open=open,
+                    high=high,
+                    low=low,
+                    close=close,
+                    volume=0,
+                    daily_high=max_price,
+                    daily_low=min_price,
+                    daily_volume=0,
+                    total_call_volume=random.randint(100000,150000),
+                    total_put_volume=random.randint(100000,150000),
+                    index_future_premium=random.uniform(0.1,2.0),
+                    total_trade_count=0,
+                    one_minute_trade_rate=0,
+                    rt_historical_volatility=0,
+                    option_implied_volatility=random.uniform(-1.0,1.0),
+                    call_open_interest=random.uniform(100000, 150000),
+                    put_open_interest=random.uniform(100000,150000),
+                    futures_open_interest=0
+                )
+            ],
+            underlying_averages=[],
+            underlying_price_ticks=[]
+        )
+
 
 class NewsEventModel(BaseModel):
     time: int
@@ -183,3 +214,56 @@ MESSAGE_TYPE_MAP = {
     "isb_action": ISBActionModel,
     "option_data": OptionDataModel
 }
+
+
+########################################################################################
+# Outbound Websocket Models
+########################################################################################
+
+# Underlying
+
+class UnderlyingCandle(BaseModel):
+    time: int
+    date_time: datetime
+    open: float
+    high: float
+    low: float
+    close: float
+    total_call_volume: Optional[int]
+    total_put_volume: Optional[int]
+    option_implied_volatility: Optional[float]
+    candle_returns: Optional[float] = 0
+    call_volume_delta: Optional[float] = 0
+    put_volume_delta: Optional[float] = 0
+
+class UnderlyingTick(BaseModel):
+    time: int
+    price: float
+
+class UnderlyingExtraData(BaseModel):
+    call_open_interest: int
+    put_open_interest: int
+    futures_open_interest: int
+    low_13_week: float
+    high_13_week: float 
+    low_26_week: float
+    high_26_week: float
+    low_52_week: float
+    high_52_weeK: float
+    daily_high: float
+    daily_low: float
+    last_option_iv: float
+
+class UnderlyingGeneral(BaseModel):
+    symbol: str
+    candle: Optional[UnderlyingCandle] = None
+    tick: Optional[UnderlyingTick] = None
+    extra_data: Optional[UnderlyingExtraData] = None
+
+
+# General
+
+class OutboundWSData(BaseModel):
+    type: str # underlying, news, or option
+    news: Optional[NewsEventModel] = None
+    underlying: Optional[UnderlyingGeneral] = None
