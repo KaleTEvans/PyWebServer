@@ -5,19 +5,20 @@
 import threading
 import time
 import queue
-import pandas as pd
+import asyncio
 
 from app.cppserver_comms.models import (OptionDataModel, FiveSecDataModel, TimeAndSalesDataModel,
                                         UnderlyingOneMinDataModel, UnderlyingAveragesModel,
                                         UnderlyingPriceTickModel ,TickDataModel, OneMinDataModel,
-                                        UnderlyingContractModel, NewsEventModel)
+                                        UnderlyingContractModel, NewsEventModel, UnderlyingCandle,
+                                        UnderlyingExtraData)
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from fastapi.responses import JSONResponse
 from typing import List
 
 from utils.singleton import Singleton
-from app.option_data_handling.underlying_data_handler import UnderlyingDataHandler, UnderlyingCandle, UnderlyingExtraData
+from app.option_data_handling.underlying_data_handler import UnderlyingDataHandler
 
 option_data_router = APIRouter(prefix="/option-data")
 
@@ -30,73 +31,56 @@ option_data_router = APIRouter(prefix="/option-data")
 
 class HFDataHandler(metaclass=Singleton):
     def __init__(self):
-        self._incoming_data_queue = queue.Queue()
+        self._incoming_data_queue = asyncio.Queue()
 
         # Sorted data containers
-        self.news_data = pd.DataFrame(columns=["time", "date_time", "article_id", "headline", "sentiment_score"])
         self.underlying_data: dict[str, UnderlyingDataHandler] = {}
-
         self.news_objects: List[NewsEventModel] = []
 
-        # Threading
-        self._thread = None
-        self._running = threading.Event()
-        self._lock = threading.Lock()
-
-    def start(self):
-        print("Starting HF data handler thread.")
-        if self._thread is None:
-            self._running.set()
-            self._thread = threading.Thread(target=self._process_data_queue)
-            self._thread.start()
+    async def start(self):
+        print("Starting HF data handler.")
+        asyncio.create_task(self._process_data_queue())
 
     def stop(self):
-        print("Stopping HF data handler thread.")
-        if self._thread is not None:
-            self._running.clear()
-            self._thread.join()
-            self._thread = None
+        print("Stopping HF data handler.")
 
-    def add_new_data(self, pydantic_model):
-        self._incoming_data_queue.put(pydantic_model)
+    async def add_new_data(self, pydantic_model):
+        await self._incoming_data_queue.put(pydantic_model)
             
-    def _process_data_queue(self):
-        while self._running.is_set():
+    async def _process_data_queue(self):
+        while True:
             try:
-                data = self._incoming_data_queue.get(timeout=1)
+                data = await self._incoming_data_queue.get()
                 if isinstance(data, NewsEventModel):
                     self._handle_news_data(data=data)
                 elif isinstance(data, UnderlyingContractModel):
-                    self._handle_underlying_data(data=data)
+                    await self._handle_underlying_data(data=data)
                 elif isinstance(data, OptionDataModel):
                     self._handle_option_data(data=data)
                 else:
                     print("Data not matched with any models.")
                     continue
-            except queue.Empty:
+            except self._incoming_data_queue.empty():
                 continue
             except Exception as e:
                 print(f"HF Data Queue error: {e}")
 
     def _handle_news_data(self, data: NewsEventModel):
         try:
-            with self._lock:
-                self.news_objects.append(data)
+            self.news_objects.append(data)
         except Exception as e:
             print(f"Error handling news data: {e}")
 
     def get_news_data(self):
-        with self._lock:
-            return self.news_objects
+        return self.news_objects
 
-    def _handle_underlying_data(self, data: UnderlyingContractModel):
-        with self._lock:
-            if data.symbol not in self.underlying_data.keys():
-                underlying_data = UnderlyingDataHandler(data.symbol)
-                self.underlying_data[data.symbol] = underlying_data
-                print(f"New ticker added to UnderlyingData: {data.symbol}")
+    async def _handle_underlying_data(self, data: UnderlyingContractModel):
+        if data.symbol not in self.underlying_data.keys():
+            underlying_data = UnderlyingDataHandler(data.symbol)
+            self.underlying_data[data.symbol] = underlying_data
+            print(f"New ticker added to UnderlyingData: {data.symbol}")
 
-            self.underlying_data[data.symbol].add_data(data=data)
+        await self.underlying_data[data.symbol].add_data(data=data)
 
     def _handle_option_data(self, data: OptionDataModel):
         return

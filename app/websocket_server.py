@@ -2,17 +2,17 @@
 # Used for sending streaming data to the client web app
 ########################################################
 
+from app.cppserver_comms.models import OutboundWSData
+from typing import List
+
 from fastapi import WebSocket, APIRouter, WebSocketDisconnect
+from fastapi.encoders import jsonable_encoder
 import asyncio
 import threading
 import queue
-import json
-
-ws_server_thread = None
-stop_event = threading.Event()
 
 # Add all items to this that will be sent to the react webpage
-react_queue = queue.Queue()
+react_queue = asyncio.Queue()
 
 outbound_ws_react_router = APIRouter(prefix="/hf-data")
 
@@ -21,18 +21,12 @@ async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     print("Client Connected.")
     try:
-        batch = []
+        # batch: List[OutboundWSData] = []
         while True:
-            while not react_queue.empty():
-                # Grab data from the async queue
-                batch.append(react_queue.get())
-            
-            if batch:
-                await websocket.send_json(batch)
-                batch = []
-
-            # Send batch every 100ms
-            await asyncio.sleep(0.1)
+            # Grab data from the async queue
+            data: OutboundWSData = await react_queue.get()
+            # batch.append(jsonable_encoder(data))
+            await websocket.send_json(jsonable_encoder(data))
 
     except WebSocketDisconnect:
         print("Client disconnected.")

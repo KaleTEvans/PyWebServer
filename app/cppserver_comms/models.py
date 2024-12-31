@@ -224,7 +224,6 @@ MESSAGE_TYPE_MAP = {
 
 class UnderlyingCandle(BaseModel):
     time: int
-    date_time: datetime
     open: float
     high: float
     low: float

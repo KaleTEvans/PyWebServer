@@ -48,7 +48,7 @@ class UnderlyingDataHandler:
 
         self.one_min_candles: List[UnderlyingCandle] = []
 
-    def add_data(self, data: UnderlyingContractModel):
+    async def add_data(self, data: UnderlyingContractModel):
         if len(data.underlying_averages) > 0:
             for row in data.underlying_averages:
                 if row.low_13_week != self.low_13_week: self.low_13_week = row.low_13_week
@@ -69,7 +69,6 @@ class UnderlyingDataHandler:
 
                 candle = UnderlyingCandle(
                     time=row.time,
-                    date_time=row.date_time,
                     open=row.open,
                     high=row.high,
                     low=row.low,
@@ -121,15 +120,10 @@ class UnderlyingDataHandler:
                     underlying=underlying
                 )
 
-                ##########################################
-                # TODO: Add function to send to websocket
-                ##########################################
+                await self.enqueue_ws_data(data=outbound)
 
-
-                self.enqueue_ws_data(data=outbound.model_dump_json())
-
-    def enqueue_ws_data(self, data):
-        websocket_server.react_queue.put(data)
+    async def enqueue_ws_data(self, data):
+        await websocket_server.react_queue.put(data)
 
     def get_candles(self):
         return self.one_min_candles

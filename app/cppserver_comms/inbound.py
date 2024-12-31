@@ -15,9 +15,6 @@ from app.option_data_handling import hf_data_processor
 
 hf_data = hf_data_processor.HFDataHandler()
 
-# Data type conversion functions to pydantic models
-
-
 # Handle all incoming messages from the CPP Server here
 class WSDataHandler(metaclass=Singleton):
     def __init__(self):
@@ -38,7 +35,7 @@ class WSDataHandler(metaclass=Singleton):
                 # print(f"Received message: {parsed_message}")
 
                 pydantic_model = self.convert_from_protobuf(protobuf_message=parsed_message)
-                self.handle_formatted_messages(pydantic_model=pydantic_model)
+                await self.handle_formatted_messages(pydantic_model=pydantic_model)
             except Exception as e:
                 print(f"Exception thrown during cpp websocket processing: {e}")
                 continue    
@@ -201,7 +198,7 @@ class WSDataHandler(metaclass=Singleton):
         else:
             raise ValueError(f"Unsupported message type: {message_type}")
     
-    def handle_formatted_messages(self, pydantic_model):
+    async def handle_formatted_messages(self, pydantic_model):
         """
         Perform actions based on the type of the Pydantic model.
         """
@@ -220,13 +217,13 @@ class WSDataHandler(metaclass=Singleton):
             print(f"Data: {pydantic_model.data}")
 
         elif isinstance(pydantic_model, OptionDataModel):
-            hf_data.add_new_data(pydantic_model=pydantic_model)
+            await hf_data.add_new_data(pydantic_model=pydantic_model)
         
         elif isinstance(pydantic_model, UnderlyingContractModel):
-            hf_data.add_new_data(pydantic_model=pydantic_model)
+            await hf_data.add_new_data(pydantic_model=pydantic_model)
 
         elif isinstance(pydantic_model, NewsEventModel):
-            hf_data.add_new_data(pydantic_model=pydantic_model)
+            await hf_data.add_new_data(pydantic_model=pydantic_model)
             print(f"Article Received: {pydantic_model.headline}")
             print(f"Sentiment Score: {pydantic_model.sentiment_score}")
             print(f"Time: {pydantic_model.date_time}")
