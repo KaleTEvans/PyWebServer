@@ -21,17 +21,17 @@ hf_data = hf_data_processor.HFDataHandler()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    connect_task = asyncio.create_task(ws_client.connect())
+    # connect_task = asyncio.create_task(ws_client.connect())
     data_processing_task = asyncio.create_task(hf_data.start())
-    # cpp_ws_test.start_cpp_ws_test()
+    cpp_ws_test.start_cpp_ws_test()
     # await outbound.add_ticker_to_scanner(symbol="SPX")
     # await outbound.start_scanner()
     yield  
     # Ensure the WebSocket is properly disconnected
-    # cpp_ws_test.stop_cpp_ws_test()
-    await ws_client.cleanup()
+    cpp_ws_test.stop_cpp_ws_test()
+    # await ws_client.cleanup()
     data_processing_task.cancel()
-    connect_task.cancel()
+    # connect_task.cancel()
 
 app = FastAPI(lifespan=lifespan)
 
@@ -39,7 +39,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Replace with your React app URL
+    allow_origins=["*"],  # Replace with your React app URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -56,6 +56,6 @@ app.include_router(websocket_server.outbound_ws_react_router)
 if __name__ == "__main__":
     try:
         import uvicorn
-        uvicorn.run("isb:app", host="0.0.0.0", port=8000, proxy_headers=True)
+        uvicorn.run("main:app", host="0.0.0.0", port=8000, proxy_headers=True)
     except KeyboardInterrupt:
         print("Program interrupted by user. Exiting...")

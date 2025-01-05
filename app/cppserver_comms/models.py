@@ -148,11 +148,17 @@ class UnderlyingContractModel(BaseModel):
     
     @classmethod
     def random_candles(cls, open, high, low, close, max_price, min_price):
+        def get_time_stamp():
+            current_time = time.time()
+            even_minute_time = round(current_time / 60) * 60
+            # Subtract 60 so that candle appears to be created prior to first tick
+            return even_minute_time - 60
+        
         return cls(
             symbol="SPX",
             underlying_one_min=[
                 UnderlyingOneMinDataModel(
-                    time=round(time.time() * 1000),
+                    time=get_time_stamp(),
                     date_time=datetime.fromtimestamp(round(time.time())),
                     open=open,
                     high=high,
