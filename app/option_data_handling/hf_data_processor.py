@@ -11,7 +11,7 @@ from app.cppserver_comms.models import (OptionDataModel, FiveSecDataModel, TimeA
                                         UnderlyingOneMinDataModel, UnderlyingAveragesModel,
                                         UnderlyingPriceTickModel ,TickDataModel, OneMinDataModel,
                                         UnderlyingContractModel, NewsEventModel, UnderlyingCandle,
-                                        UnderlyingExtraData)
+                                        UnderlyingExtraData, TimeAndSalesByMinute)
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from fastapi.responses import JSONResponse
@@ -19,6 +19,7 @@ from typing import List
 
 from utils.singleton import Singleton
 from app.option_data_handling.underlying_data_handler import UnderlyingDataHandler
+from app.option_data_handling.option_data_handler import OptionDataHandler
 
 option_data_router = APIRouter(prefix="/option-data")
 
@@ -35,6 +36,7 @@ class HFDataHandler(metaclass=Singleton):
 
         # Sorted data containers
         self.underlying_data: dict[str, UnderlyingDataHandler] = {}
+        self.option_data: dict[str, OptionDataHandler] = {}
         self.news_objects: List[NewsEventModel] = []
 
     async def start(self):
@@ -83,14 +85,18 @@ class HFDataHandler(metaclass=Singleton):
         await self.underlying_data[data.symbol].add_data(data=data)
 
     def _handle_option_data(self, data: OptionDataModel):
-        return
+        if data.symbol not in self.option_data.keys():
+            option_data = OptionDataHandler(data.symbol)
+            self.option_data[data.symbol] = option_data
+
+        self.option_data[data.symbol].add_data(data=data)
         
 
 hf_data = HFDataHandler() 
 
-@option_data_router.get("/news", response_model=List[NewsEventModel])
-async def get_news_data():
-    return hf_data.get_news_data()
+# @option_data_router.get("/news", response_model=List[NewsEventModel])
+# async def get_news_data():
+#     return hf_data.get_news_data()
 
 @option_data_router.get("/{ticker}/underlying/get-today-candles", response_model=List[UnderlyingCandle])
 async def get_underlying_candles(ticker):
@@ -103,5 +109,12 @@ async def get_underlying_candles(ticker):
 async def get_underlying_extra_data(ticker):
     if ticker in hf_data.underlying_data.keys():
         return hf_data.underlying_data[ticker].get_extra_data()
+    else:
+        print(f"No underlying data found for ticker: {ticker}")
+
+@option_data_router.get("/{ticker}/option/time-and-sales-by-minute", response_model=TimeAndSalesByMinute)
+async def get_time_and_sales_by_minute(ticker):
+    if ticker in hf_data.option_data.keys():
+        return hf_data.option_data[ticker].get_tas_aggregate_data()
     else:
         print(f"No underlying data found for ticker: {ticker}")

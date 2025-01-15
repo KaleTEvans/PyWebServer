@@ -38,10 +38,6 @@ async def generate_random_objects():
         prev_price = underlying_tick.underlying_price_ticks[0].price
         await data_handler.handle_formatted_messages(pydantic_model=underlying_tick)
 
-        if time_passed % 30 == 0:
-            news = NewsEventModel.random()
-            await data_handler.handle_formatted_messages(pydantic_model=news)
-
         if time_passed % 60 == 0:
             open = one_min_prices[0]
             high = max(one_min_prices)

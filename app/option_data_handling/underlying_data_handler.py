@@ -67,6 +67,18 @@ class UnderlyingDataHandler:
                 if row.daily_low > 0: self.daily_low = row.daily_low
                 if row.option_implied_volatility > 0: self.last_option_iv = row.option_implied_volatility
 
+                # Update statistic values
+                candle_returns = ((row.close - row.open) / row.open) * 100
+                self.one_min_price_stats.add(candle_returns)
+
+                call_volume_delta = row.total_call_volume - self.last_total_call_volume
+                self.total_call_stats.add(call_volume_delta)
+                self.last_total_call_volume = row.total_call_volume
+
+                put_volume_delta = row.total_put_volume - self.last_total_put_volume
+                self.total_put_stats.add(put_volume_delta)
+                self.last_total_put_volume = row.total_put_volume
+
                 candle = UnderlyingCandle(
                     time=row.time,
                     open=row.open,
@@ -75,33 +87,27 @@ class UnderlyingDataHandler:
                     close=row.close,
                     total_call_volume=row.total_call_volume,
                     total_put_volume=row.total_put_volume,
-                    option_implied_volatility=self.last_option_iv
+                    option_implied_volatility=self.last_option_iv,
+                    candle_returns=candle_returns,
+                    call_volume_delta=call_volume_delta,
+                    put_volume_delta=put_volume_delta
                 )
-
-                print(candle)
-
-                # Update statistic values
-                candle_returns = ((row.close - row.open) / row.open) * 100
-                self.one_min_price_stats.add(candle_returns)
-                candle.candle_returns = candle_returns
-
-                call_volume_delta = row.total_call_volume - self.last_total_call_volume
-                self.total_call_stats.add(call_volume_delta)
-                candle.call_volume_delta = call_volume_delta
-                self.last_total_call_volume = row.total_call_volume
-
-                put_volume_delta = row.total_put_volume - self.last_total_put_volume
-                self.total_put_stats.add(put_volume_delta)
-                candle.put_volume_delta = put_volume_delta
-                self.last_total_put_volume = row.total_put_volume
 
                 self.one_min_candles.append(candle)
 
-                ##########################################
-                # TODO: Add function to send to websocket
-                ##########################################
+                print(candle)
 
-                # await websocket_server.react_queue.put(candle.model_dump_json())
+                underlying = UnderlyingGeneral(
+                    symbol=self.symbol,
+                    candle=candle
+                )
+
+                outbound = OutboundWSData(
+                    type="underlying",
+                    underlying=underlying
+                )
+
+                await self.enqueue_ws_data(data=outbound)
 
         if len(data.underlying_price_ticks) > 0:
             for row in data.underlying_price_ticks:

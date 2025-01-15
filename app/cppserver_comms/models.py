@@ -35,6 +35,26 @@ class TimeAndSalesDataModel(BaseModel):
     current_bid: Optional[float]
     current_rtm: Optional[str]
 
+class TimeAndSalesAggregated(BaseModel):
+    timestamp: int
+    volume_at_ask: int
+    total_value_at_ask: float
+    otm_volume_at_ask: int
+    itm_volume_at_ask: int
+    volume_at_bid: int
+    total_value_at_bid: float
+    otm_volume_at_bid: int
+    itm_volume_at_bid: int
+    volume_at_middle: int
+    total_value_at_middle: float
+    otm_volume_at_middle: int
+    itm_volume_at_middle: int
+
+class TimeAndSalesByMinute(BaseModel):
+    ticker: str
+    call_data: List[TimeAndSalesAggregated]
+    put_data: List[TimeAndSalesAggregated]
+
 class TickDataModel(BaseModel):
     timestamp: int
     bid_price: Optional[float]
@@ -174,7 +194,7 @@ class UnderlyingContractModel(BaseModel):
                     total_trade_count=0,
                     one_minute_trade_rate=0,
                     rt_historical_volatility=0,
-                    option_implied_volatility=random.uniform(-1.0,1.0),
+                    option_implied_volatility=random.uniform(0.0,1.0),
                     call_open_interest=random.uniform(100000, 150000),
                     put_open_interest=random.uniform(100000,150000),
                     futures_open_interest=0
@@ -193,18 +213,18 @@ class NewsEventModel(BaseModel):
     sentiment_score: float
 
     # Random data generation
-    @classmethod
-    def random(cls):
-        def random_datetime():
-            return datetime.now() - timedelta(seconds=random.randint(0, 100000))
+    # @classmethod
+    # def random(cls):
+    #     def random_datetime():
+    #         return datetime.now() - timedelta(seconds=random.randint(0, 100000))
         
-        return cls(
-            time=int((datetime.now() - timedelta(seconds=random.randint(0, 100000))).timestamp() * 1000),
-            date_time=random_datetime(),
-            article_id=f"ART{random.randint(1000, 9999)}",
-            headline=f"Breaking News {random.randint(1, 100)}",
-            sentiment_score=random.uniform(-1, 1)
-        )
+    #     return cls(
+    #         time=int((datetime.now() - timedelta(seconds=random.randint(0, 100000))).timestamp() * 1000),
+    #         date_time=random_datetime(),
+    #         article_id=f"ART{random.randint(1000, 9999)}",
+    #         headline=f"Breaking News {random.randint(1, 100)}",
+    #         sentiment_score=random.uniform(-1, 1)
+    #     )
 
 
 class MessageModel(BaseModel):
@@ -272,3 +292,4 @@ class OutboundWSData(BaseModel):
     type: str # underlying, news, or option
     news: Optional[NewsEventModel] = None
     underlying: Optional[UnderlyingGeneral] = None
+    option: Optional[OptionDataModel] = None
