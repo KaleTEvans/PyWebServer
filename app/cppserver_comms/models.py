@@ -285,6 +285,82 @@ class UnderlyingGeneral(BaseModel):
     tick: Optional[UnderlyingTick] = None
     extra_data: Optional[UnderlyingExtraData] = None
 
+# Real Time Trade Feed
+
+class TimeAndSales(BaseModel):
+    timestamp: int
+    symbol: str
+    right: str
+    strike: int
+    price: float
+    quantity: int
+    total_cost: float
+    total_volume: int
+    vwap: float
+    current_ask: Optional[float]
+    current_bid: Optional[float]
+    current_rtm: Optional[str]
+
+def filter_tas_data(
+    data: List[TimeAndSales],
+    right: str,
+    rtm: str,
+    quantity: int,
+    cost: float,
+    limit: int
+) -> List[TimeAndSales]:
+    
+    right_filter = None
+    if right == "CALLS":
+        right_filter = "C"
+    elif right == "PUTS":
+        right_filter = "P"
+
+    strike_filter = None
+    if rtm in ["ITM", "OTM"]:
+        strike_filter = rtm
+
+    quantity_ranges = {
+        0: (0, float("inf")),
+        5: (5, float("inf")),
+        10: (10, float("inf")),
+        25: (25, float("inf")),
+        50: (50, float("inf")),
+        100: (100, float("inf")),
+        250: (250, float("inf")),
+        500: (500, float("inf")),
+        1000: (1000, float("inf")),
+    }
+    quantity_start, quantity_end = quantity_ranges.get(quantity, (None, None))
+
+    cost_ranges = {
+        0: (0.00, float("inf")),
+        1000: (1000.00, float("inf")),
+        5000: (5000.00, float("inf")),
+        10000: (10000.00, float("inf")),
+        25000: (25000.00, float("inf")),
+        50000: (50000.00, float("inf")),
+        100000: (100000.00, float("inf")),
+        1000000: (1000000.00, float("inf")),
+    }
+    cost_start, cost_end = cost_ranges.get(cost, (None, None))
+
+    filtered_data = []
+    for item in data:
+        if right_filter and item.right != right_filter:
+            continue
+        if strike_filter and not (item.current_rtm and strike_filter in item.current_rtm):
+            continue
+        if quantity_start is not None and not (quantity_start <= item.quantity <= quantity_end):
+            continue
+        if cost_start is not None and not (cost_start <= item.price * item.quantity <= cost_end):
+            continue
+        filtered_data.append(item)
+
+    # Sort by timestamp (most recent first) and limit results
+    filtered_data.sort(key=lambda x: x.timestamp, reverse=True)
+    return filtered_data[:limit]
+
 
 # General
 

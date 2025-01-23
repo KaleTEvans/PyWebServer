@@ -11,9 +11,9 @@ from app.cppserver_comms.models import (OptionDataModel, FiveSecDataModel, TimeA
                                         UnderlyingOneMinDataModel, UnderlyingAveragesModel,
                                         UnderlyingPriceTickModel ,TickDataModel, OneMinDataModel,
                                         UnderlyingContractModel, NewsEventModel, UnderlyingCandle,
-                                        UnderlyingExtraData, TimeAndSalesByMinute)
+                                        UnderlyingExtraData, TimeAndSalesByMinute, TimeAndSales)
 
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, Query
 from fastapi.responses import JSONResponse
 from typing import List
 
@@ -112,9 +112,62 @@ async def get_underlying_extra_data(ticker):
     else:
         print(f"No underlying data found for ticker: {ticker}")
 
-@option_data_router.get("/{ticker}/option/time-and-sales-by-minute", response_model=TimeAndSalesByMinute)
+@option_data_router.get(
+    "/{ticker}/option/time-and-sales/all",
+    response_model=List[TimeAndSales],
+    summary="Get option time and sales data",
+    description="Fetch time and sales data for a given ticker with filters for rights, strikes, quantity, cost, and limit."
+)
+async def get_all_tas_data(
+    ticker: str,
+    right: str = Query("ALL", description='Filter by option right: "CALLS", "PUTS", or "ALL".'),
+    strikes: str = Query("ALL", description='Filter by strike type: "ITM", "OTM", or "ALL".'),
+    quantity: int = Query(
+        0,
+        description=(
+            "Filter by quantity range:\n"
+            "- 0: All\n"
+            "- 5: 5+\n"
+            "- 10: 10+\n"
+            "- 25: 25+\n"
+            "- 50: 50+\n"
+            "- 100: 100+\n"
+            "- 250: 250+\n"
+            "- 500: 500+\n"
+            "- 1000: 1000+"
+        )
+    ),
+    cost: float = Query(
+        0,
+        description=(
+            "Filter by cost range:\n"
+            "- 0: All\n"
+            "- 1000: $1,000.00+\n"
+            "- 5000: $5,000.00+\n"
+            "- 10000: $10,000.00+\n"
+            "- 25000: $25,000.00+\n"
+            "- 50000: $50,000.00+\n"
+            "- 100000: $100,000.00+\n"
+            "- 1000000: $1,000,000.00+"
+        )
+    ),
+    limit: int = Query(200, description="Maximum number of results to return.")
+) -> List[TimeAndSales]:
+    if ticker in hf_data.option_data.keys():
+        return hf_data.option_data[ticker].get_all_tas_data(
+            right=right,
+            strikes=strikes,
+            quantity=quantity,
+            cost=cost,
+            limit=limit
+        )
+    else:
+        print(f"No time and sales data found for ticker: {ticker}")
+    
+
+@option_data_router.get("/{ticker}/option/time-and-sales/minute", response_model=TimeAndSalesByMinute)
 async def get_time_and_sales_by_minute(ticker):
     if ticker in hf_data.option_data.keys():
         return hf_data.option_data[ticker].get_tas_aggregate_data()
     else:
-        print(f"No underlying data found for ticker: {ticker}")
+        print(f"No time and sales by minute data found for ticker: {ticker}")

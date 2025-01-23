@@ -16,7 +16,9 @@ from typing import Optional, List
 
 from utils.standard_dev import StreamingStatistics
 from app.cppserver_comms.models import (OptionDataModel, TimeAndSalesDataModel, TimeAndSalesByMinute,
-                                        FiveSecDataModel, OneMinDataModel, TimeAndSalesAggregated)
+                                        FiveSecDataModel, OneMinDataModel, TimeAndSalesAggregated,
+                                        TimeAndSales, filter_tas_data
+                                        )
 
 class SingleOptionData:
     def __init__(self, symbol, right, current_rtm=None, strike=None):
@@ -55,6 +57,8 @@ class OptionDataHandler:
         self.total_volume_at_ask: int = 0
         self.total_colume_at_bid: int = 0
         self.total_volume_between: int = 0
+
+        self.all_tas_data: List[TimeAndSales] = []
 
         self.calls_tas_aggregated: List[TimeAndSalesAggregated] = []
         self.puts_tas_aggregated: List[TimeAndSalesAggregated] = []
@@ -137,7 +141,22 @@ class OptionDataHandler:
 
         if len(data.tas) > 0:
             trade = data.tas[0]
-            # print(f"{trade.timestamp} | Trade Price: {trade.price} | Amount: {trade.quantity} | Total Vol: {trade.total_volume} | Current RTM: {trade.current_rtm} | Bid: {trade.current_bid} | Ask: {trade.current_ask}")
+            
+            time_and_sales = TimeAndSales(
+                timestamp=trade.timestamp,
+                symbol=data.symbol,
+                right=data.right,
+                strike=data.strike,
+                price=trade.price,
+                quantity=trade.quantity,
+                total_cost=(trade.quantity * (trade.price*100)),
+                total_volume=trade.total_volume,
+                vwap=trade.vwap,
+                current_ask=trade.current_ask,
+                current_bid=trade.current_bid,
+                current_rtm=trade.current_rtm
+            )
+            self.all_tas_data.append(time_and_sales)
 
             if data.right == "C":
                 self.update_time_and_sales_aggregate_data(trade=trade, tas_aggregated=self.tas_by_minute.call_data)
@@ -147,6 +166,16 @@ class OptionDataHandler:
                 print("Invalid option right during data intake.")
 
     def get_tas_aggregate_data(self): return self.tas_by_minute
+
+    def get_all_tas_data(self, right: str, strikes: str, quantity: int, cost: float, limit: int):
+        return filter_tas_data(
+            data=self.all_tas_data,
+            right=right,
+            rtm=strikes,
+            quantity=quantity,
+            cost=cost,
+            limit=limit
+        )
 
     def update_time_and_sales_aggregate_data(self, trade: TimeAndSalesDataModel, tas_aggregated: List[TimeAndSalesAggregated]):
         if len(tas_aggregated) > 0:
