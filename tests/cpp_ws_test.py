@@ -1,4 +1,4 @@
-from app.cppserver_comms.models import UnderlyingContractModel, NewsEventModel
+from app.cppserver_comms.models import UnderlyingContractModel, NewsEventModel, OptionDataModel
 from app.cppserver_comms.inbound import WSDataHandler
 
 import threading
@@ -30,15 +30,22 @@ async def generate_random_objects():
     min_price = 10000
     data_handler = WSDataHandler()
 
-    while not stop_event.is_set():
-        one_min_prices.append(prev_price)
-        max_price = max(max_price, prev_price)
-        min_price = min(min_price, prev_price)
-        underlying_tick = UnderlyingContractModel.random_tick(prev=prev_price)
-        prev_price = underlying_tick.underlying_price_ticks[0].price
-        await data_handler.handle_formatted_messages(pydantic_model=underlying_tick)
+    last_tick_time = time.time()
+    last_min_time = time.time()
 
-        if time_passed % 60 == 0:
+    while not stop_event.is_set():
+        current_time = time.time()
+
+        if current_time - last_tick_time >= 0.250:
+            one_min_prices.append(prev_price)
+            max_price = max(max_price, prev_price)
+            min_price = min(min_price, prev_price)
+            underlying_tick = UnderlyingContractModel.random_tick(prev=prev_price)
+            prev_price = underlying_tick.underlying_price_ticks[0].price
+            await data_handler.handle_formatted_messages(pydantic_model=underlying_tick)
+            last_tick_time = current_time
+
+        if current_time - last_min_time >= 60:
             open = one_min_prices[0]
             high = max(one_min_prices)
             low = min(one_min_prices)
@@ -51,9 +58,12 @@ async def generate_random_objects():
 
             # Set prev_price to the close price to match candle open with close
             prev_price = close
+            last_min_time = current_time
 
-        time.sleep(0.250)
-        time_passed += 0.250
+        tas = OptionDataModel.random()
+        await data_handler.handle_formatted_messages(pydantic_model=tas)
+
+        await asyncio.sleep(0.01)
 
 def start_cpp_ws_test():
     global test_thread

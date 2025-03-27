@@ -15,6 +15,9 @@ from app.cppserver_comms.models import (UnderlyingContractModel, UnderlyingCandl
                                         UnderlyingExtraData, UnderlyingGeneral, OutboundWSData)
 
 from app import websocket_server
+from app.db_managment.db_inserter import DbInserter
+
+db_inserter = DbInserter()
 
 ###############################################
 # All data handled here
@@ -96,6 +99,23 @@ class UnderlyingDataHandler:
                 self.one_min_candles.append(candle)
 
                 print(candle)
+
+                db_inserter.create_underlying_one_min_row(
+                    date_time=row.date_time,
+                    time=row.time,
+                    open=row.open,
+                    high=row.high,
+                    low=row.low,
+                    close=row.close,
+                    daily_high=row.daily_high,
+                    daily_low=row.daily_low,
+                    total_call_volume=row.total_call_volume,
+                    total_put_volume=row.total_put_volume,
+                    option_implied_volatility=row.option_implied_volatility,
+                    call_open_interest=row.call_open_interest,
+                    put_open_interest=row.put_open_interest,
+                    futures_open_interest=row.futures_open_interest
+                )
 
                 underlying = UnderlyingGeneral(
                     symbol=self.symbol,

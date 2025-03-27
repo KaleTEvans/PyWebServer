@@ -17,8 +17,10 @@ from typing import Optional, List
 from utils.standard_dev import StreamingStatistics
 from app.cppserver_comms.models import (OptionDataModel, TimeAndSalesDataModel, TimeAndSalesByMinute,
                                         FiveSecDataModel, OneMinDataModel, TimeAndSalesAggregated,
-                                        TimeAndSales, filter_tas_data
+                                        TimeAndSales, filter_tas_data, OutboundWSData
                                         )
+
+from app import websocket_server
 
 class SingleOptionData:
     def __init__(self, symbol, right, current_rtm=None, strike=None):
@@ -70,7 +72,7 @@ class OptionDataHandler:
 
     def update_exp_date(self, exp_date): self.exp_date = exp_date
 
-    def add_data(self, data: OptionDataModel):
+    async def add_data(self, data: OptionDataModel):
         if self.exp_date == "" : self.exp_date = data.exp_date
         if data.strike not in self.current_chain: self.current_chain.add(data.strike)
 
@@ -156,6 +158,14 @@ class OptionDataHandler:
                 current_bid=trade.current_bid,
                 current_rtm=trade.current_rtm
             )
+
+            outbound = OutboundWSData(
+                type="tas",
+                tas=time_and_sales
+            )
+
+            await self.enqueue_ws_data(data=outbound)
+
             self.all_tas_data.append(time_and_sales)
 
             if data.right == "C":
@@ -164,6 +174,9 @@ class OptionDataHandler:
                 self.update_time_and_sales_aggregate_data(trade=trade, tas_aggregated=self.tas_by_minute.put_data)
             else:
                 print("Invalid option right during data intake.")
+
+    async def enqueue_ws_data(self, data):
+        await websocket_server.react_queue.put(data)
 
     def get_tas_aggregate_data(self): return self.tas_by_minute
 

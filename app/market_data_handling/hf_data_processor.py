@@ -18,8 +18,8 @@ from fastapi.responses import JSONResponse
 from typing import List
 
 from utils.singleton import Singleton
-from app.option_data_handling.underlying_data_handler import UnderlyingDataHandler
-from app.option_data_handling.option_data_handler import OptionDataHandler
+from app.market_data_handling.underlying_data_handler import UnderlyingDataHandler
+from app.market_data_handling.option_data_handler import OptionDataHandler
 
 option_data_router = APIRouter(prefix="/option-data")
 
@@ -58,12 +58,13 @@ class HFDataHandler(metaclass=Singleton):
                 elif isinstance(data, UnderlyingContractModel):
                     await self._handle_underlying_data(data=data)
                 elif isinstance(data, OptionDataModel):
-                    self._handle_option_data(data=data)
+                    await self._handle_option_data(data=data)
                 else:
                     print("Data not matched with any models.")
                     continue
-            except self._incoming_data_queue.empty():
-                continue
+            except asyncio.CancelledError:
+                print("HF Data Queue task cancelled.")
+                break
             except Exception as e:
                 print(f"HF Data Queue error: {e}")
 
@@ -84,12 +85,12 @@ class HFDataHandler(metaclass=Singleton):
 
         await self.underlying_data[data.symbol].add_data(data=data)
 
-    def _handle_option_data(self, data: OptionDataModel):
+    async def _handle_option_data(self, data: OptionDataModel):
         if data.symbol not in self.option_data.keys():
             option_data = OptionDataHandler(data.symbol)
             self.option_data[data.symbol] = option_data
 
-        self.option_data[data.symbol].add_data(data=data)
+        await self.option_data[data.symbol].add_data(data=data)
         
 
 hf_data = HFDataHandler() 

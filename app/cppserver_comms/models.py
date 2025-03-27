@@ -35,6 +35,29 @@ class TimeAndSalesDataModel(BaseModel):
     current_bid: Optional[float]
     current_rtm: Optional[str]
 
+    @classmethod
+    def random(cls):
+        timestamp = int(time.time() * 1000)  # Current timestamp in milliseconds
+        price = round(random.uniform(0.05, 50.0), 2)  # Random price between 0.05 and 50
+        quantity = random.randint(1, 25)  # Quantity between 1 and 25
+        total_volume = random.randint(5000, 60000)  # Total volume between 5000 and 60000
+        vwap = round(random.uniform(1, 40), 3)  # VWAP between 1 and 40
+        
+        current_ask = round(random.uniform(price, price + 5), 2) if random.random() > 0.1 else price-0.1
+        current_bid = round(random.uniform(price - 5, price), 2) if random.random() > 0.1 else price+0.1
+        current_rtm = random.choice(["ITM1", "ITM2", "ITM3", "OTM1", "OTM2", "OTM3", "OTM4", "ITM4", "ITM5", "OTM5"])
+        
+        return cls(
+            timestamp=timestamp,
+            price=price,
+            quantity=quantity,
+            total_volume=total_volume,
+            vwap=vwap,
+            current_ask=current_ask,
+            current_bid=current_bid,
+            current_rtm=current_rtm,
+        )
+
 class TimeAndSalesAggregated(BaseModel):
     timestamp: int
     volume_at_ask: int
@@ -106,6 +129,20 @@ class OptionDataModel(BaseModel):
     five_sec_data: Optional[List[FiveSecDataModel]]
     one_min_data: Optional[List[OneMinDataModel]]
     tas: Optional[List[TimeAndSalesDataModel]]
+
+    @classmethod
+    def random(cls):
+        return cls(
+            symbol="SPX",
+            strike=random.choice(range(6000, 6100, 5)),
+            right=random.choice(["C", "P"]),
+            exp_date="",
+            ticks=[],
+            five_sec_data=[],
+            one_min_data=[],
+            tas=[TimeAndSalesDataModel.random()]
+        )
+    
 
 class UnderlyingPriceTickModel(BaseModel):
     time: int
@@ -353,7 +390,7 @@ def filter_tas_data(
             continue
         if quantity_start is not None and not (quantity_start <= item.quantity <= quantity_end):
             continue
-        if cost_start is not None and not (cost_start <= item.price * item.quantity <= cost_end):
+        if cost_start is not None and not (cost_start <= item.total_cost <= cost_end):
             continue
         filtered_data.append(item)
 
@@ -365,7 +402,8 @@ def filter_tas_data(
 # General
 
 class OutboundWSData(BaseModel):
-    type: str # underlying, news, or option
+    type: str # underlying, news, option, or tas
     news: Optional[NewsEventModel] = None
     underlying: Optional[UnderlyingGeneral] = None
     option: Optional[OptionDataModel] = None
+    tas: Optional[TimeAndSales] = None

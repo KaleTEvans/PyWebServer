@@ -8,9 +8,10 @@ from fastapi.testclient import TestClient
 from fastapi.websockets import WebSocket
 from contextlib import asynccontextmanager
 
-from app.option_data_handling import hf_data_processor
+from app.market_data_handling import hf_data_processor
 from app.cppserver_comms import outbound
 from app import websocket_server
+from app.db_managment.db_inserter import DbInserter
 
 from tests import cpp_ws_test
 import threading
@@ -19,19 +20,23 @@ import threading
 ws_client = WebSocketClient()
 hf_data = hf_data_processor.HFDataHandler()
 
+db_inserter = DbInserter()
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    connect_task = asyncio.create_task(ws_client.connect())
+    #connect_task = asyncio.create_task(ws_client.connect())
     data_processing_task = asyncio.create_task(hf_data.start())
-    # cpp_ws_test.start_cpp_ws_test()
-    await outbound.add_ticker_to_scanner(symbol="SPX")
-    await outbound.start_scanner()
+    cpp_ws_test.start_cpp_ws_test()
+    #await outbound.add_ticker_to_scanner(symbol="SPX")
+    #await outbound.start_scanner()
+    db_inserter.start()
     yield  
+    db_inserter.stop()
     # Ensure the WebSocket is properly disconnected
-    # cpp_ws_test.stop_cpp_ws_test()
-    await ws_client.cleanup()
+    cpp_ws_test.stop_cpp_ws_test()
+    #await ws_client.cleanup()
     data_processing_task.cancel()
-    connect_task.cancel()
+    #connect_task.cancel()
 
 app = FastAPI(lifespan=lifespan)
 
