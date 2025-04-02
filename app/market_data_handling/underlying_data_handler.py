@@ -51,6 +51,8 @@ class UnderlyingDataHandler:
 
         self.one_min_candles: List[UnderlyingCandle] = []
 
+        self.daily_values_updated: bool = False
+
     async def add_data(self, data: UnderlyingContractModel):
         if len(data.underlying_averages) > 0:
             for row in data.underlying_averages:
@@ -107,15 +109,28 @@ class UnderlyingDataHandler:
                     high=row.high,
                     low=row.low,
                     close=row.close,
-                    daily_high=row.daily_high,
-                    daily_low=row.daily_low,
+                    daily_high=self.daily_high,
+                    daily_low=self.daily_low,
                     total_call_volume=row.total_call_volume,
                     total_put_volume=row.total_put_volume,
-                    option_implied_volatility=row.option_implied_volatility,
-                    call_open_interest=row.call_open_interest,
-                    put_open_interest=row.put_open_interest,
-                    futures_open_interest=row.futures_open_interest
+                    option_implied_volatility=self.last_option_iv
                 )
+
+                if not self.daily_values_updated and self.check_daily_values_updated():
+                    db_inserter.create_underlying_sig_prices_row(
+                        timestammp=row.date_time,
+                        low_13_week=self.low_13_week,
+                        high_13_week=self.high_13_week,
+                        low_26_week=self.low_26_week,
+                        high_26_week=self.high_26_week,
+                        low_52_week=self.low_52_week,
+                        high_52_week=self.high_52_weeK,
+                        call_open_interest=self.call_open_interest,
+                        put_open_interest=self.put_open_interest,
+                        futures_open_interest=self.futures_open_interest
+                    )
+
+                    self.daily_values_updated = True
 
                 underlying = UnderlyingGeneral(
                     symbol=self.symbol,
@@ -169,3 +184,15 @@ class UnderlyingDataHandler:
             daily_low=self.daily_low,
             last_option_iv=self.last_option_iv
         )
+    
+    def check_daily_values_updated(self):
+        if (
+            self.low_13_week != 0 and
+            self.high_13_week != 0 and
+            self.low_26_week != 0 and
+            self.high_26_week != 0 and 
+            self.low_52_week != 0 and
+            self.high_52_weeK != 0 and
+            self.call_open_interest != 0 and
+            self.put_open_interest != 0 
+        ): return True

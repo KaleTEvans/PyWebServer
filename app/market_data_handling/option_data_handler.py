@@ -21,6 +21,9 @@ from app.cppserver_comms.models import (OptionDataModel, TimeAndSalesDataModel, 
                                         )
 
 from app import websocket_server
+from app.db_managment.db_inserter import DbInserter
+
+db_inserter = DbInserter()
 
 class SingleOptionData:
     def __init__(self, symbol, right, current_rtm=None, strike=None):
@@ -143,6 +146,10 @@ class OptionDataHandler:
 
         if len(data.tas) > 0:
             trade = data.tas[0]
+
+            # If bid is -1, set to 0 as it will send from the cpp server as -1 if the spread is 0-0.05
+            bid = trade.current_bid
+            if trade.current_bid < 0: bid = 0
             
             time_and_sales = TimeAndSales(
                 timestamp=trade.timestamp,
@@ -155,7 +162,23 @@ class OptionDataHandler:
                 total_volume=trade.total_volume,
                 vwap=trade.vwap,
                 current_ask=trade.current_ask,
-                current_bid=trade.current_bid,
+                current_bid=bid,
+                current_rtm=trade.current_rtm
+            )
+
+            db_inserter.create_rt_trade_row(
+                time=datetime.fromtimestamp(trade.timestamp/1000),
+                unix_time=trade.timestamp,
+                symbol=data.symbol,
+                right=data.right,
+                strike=data.strike,
+                price=trade.price,
+                quantity=trade.quantity,
+                total_cost=(trade.quantity * (trade.price*100)),
+                total_volume=trade.total_volume,
+                vwap=trade.vwap,
+                current_ask=trade.current_ask,
+                current_bid=bid,
                 current_rtm=trade.current_rtm
             )
 
